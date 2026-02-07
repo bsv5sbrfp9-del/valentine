@@ -40,7 +40,6 @@
       overflow-y:auto;
     }
 
-    /* subtle floating petals */
     .petals{ position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.55; }
     .petal{
       position:absolute;
@@ -134,7 +133,6 @@
       to{ opacity:1; transform: translateY(0); }
     }
 
-    /* HOME */
     .hero{
       display:grid;
       grid-template-columns: 1.05fr .95fr;
@@ -224,7 +222,6 @@
     .flowers{ font-size: 30px; letter-spacing: -2px; opacity:.95; }
     .asideNote{ color: var(--muted); font-size:13px; }
 
-    /* MEMORIES */
     .h2{
       margin:0 0 8px;
       font-size:18px;
@@ -265,7 +262,6 @@
       box-shadow: 0 18px 56px rgba(0,0,0,.14);
     }
 
-    /* paper texture */
     .envelope .paper{
       position:absolute; inset:0;
       background:
@@ -273,7 +269,6 @@
         linear-gradient(180deg, rgba(255,255,255,.65), rgba(255,255,255,.45));
     }
 
-    /* flap */
     .envelope .flap{
       position:absolute;
       left:-10%; right:-10%;
@@ -289,7 +284,6 @@
       transform: translateY(3px) rotateX(12deg);
     }
 
-    /* seal */
     .seal{
       position:absolute;
       left: 50%;
@@ -326,26 +320,11 @@
       justify-content:space-between;
       gap:10px;
     }
-    .envLeft{
-      display:grid;
-      gap:4px;
-    }
-    .envTitle{
-      font-weight:700;
-      font-size:14px;
-      letter-spacing:.1px;
-    }
-    .envSub{
-      font-size:12px;
-      color: var(--muted);
-      line-height:1.3;
-    }
-    .envStamp{
-      font-size: 16px;
-      opacity:.85;
-    }
+    .envLeft{ display:grid; gap:4px; }
+    .envTitle{ font-weight:700; font-size:14px; letter-spacing:.1px; }
+    .envSub{ font-size:12px; color: var(--muted); line-height:1.3; }
+    .envStamp{ font-size: 16px; opacity:.85; }
 
-    /* LIGHTBOX */
     .overlay{
       position:fixed;
       inset:0;
@@ -388,9 +367,7 @@
       color: var(--muted);
       padding-left: 6px;
     }
-    .viewerBtns{
-      display:flex; gap:8px;
-    }
+    .viewerBtns{ display:flex; gap:8px; }
     .iconBtn{
       border:none;
       cursor:pointer;
@@ -403,9 +380,7 @@
     }
     .iconBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.92); }
 
-    .viewerBody{
-      background: #fff;
-    }
+    .viewerBody{ background: #fff; }
     .viewerImg{
       width:100%;
       height: min(78vh, 680px);
@@ -416,7 +391,6 @@
         linear-gradient(180deg, #fff, #fff);
     }
 
-    /* LETTER panel */
     .letter{
       background: rgba(255,255,255,.62);
       border: 1px solid rgba(255,255,255,.70);
@@ -426,13 +400,8 @@
       color:#2a2a2f;
       box-shadow: 0 12px 34px rgba(0,0,0,.08);
     }
-    .sign{
-      margin-top:14px;
-      color: var(--muted);
-      font-size:13px;
-    }
+    .sign{ margin-top:14px; color: var(--muted); font-size:13px; }
 
-    /* FOR YOU */
     .bouquet{
       display:grid;
       place-items:center;
@@ -469,7 +438,6 @@
       box-shadow: 0 10px 26px rgba(0,0,0,.06);
     }
 
-    /* small subtle confetti on YES */
     .confetti{
       position:fixed; inset:0;
       pointer-events:none;
@@ -490,7 +458,6 @@
       100%{ transform: translateY(-120px) scale(1.15); opacity:0; }
     }
 
-    /* image missing helper */
     .missing{
       display:grid;
       place-items:center;
@@ -520,7 +487,6 @@
         </div>
       </div>
 
-      <!-- START -->
       <section class="panel active" id="home">
         <div class="hero">
           <div>
@@ -543,7 +509,6 @@
         </div>
       </section>
 
-      <!-- MEMORIES -->
       <section class="panel" id="mem">
         <h2 class="h2">Memories</h2>
         <p class="hint">Apasă pe fiecare plic ca să “deschizi” poza.</p>
@@ -551,17 +516,14 @@
         <div class="lettersGrid" id="lettersGrid"></div>
       </section>
 
-      <!-- LETTER -->
       <section class="panel" id="letter">
         <h2 class="h2">Letter</h2>
-
         <div class="letter">
           Micuțule șobi, mă bucur nespus de mult ca am ajuns până în punctul ăsta , cu bune și cu rele și vreau să itimultumesc ca încă ești alături de mine și mă sprijini. Îmi pare rău pentru tot haosul pe care îl produc în viața ta și sper să ne bucurăm împreună tot restul vieții . Te iubesc enorm!! 💌
           <div class="sign">— David</div>
         </div>
       </section>
 
-      <!-- FOR YOU -->
       <section class="panel" id="for">
         <h2 class="h2">For you</h2>
         <div class="bouquet">
@@ -577,7 +539,6 @@
     </div>
   </div>
 
-  <!-- LIGHTBOX -->
   <div class="overlay" id="overlay" aria-hidden="true">
     <div class="viewer" role="dialog" aria-modal="true">
       <div class="viewerTop">
@@ -588,7 +549,7 @@
           <button class="iconBtn" id="closeBtn" title="Închide">✕</button>
         </div>
       </div>
-      <div class="viewerBody">
+      <div class="viewerBody" id="viewerBody">
         <img class="viewerImg" id="viewerImg" alt="memory" />
       </div>
     </div>
@@ -610,122 +571,7 @@
     }
     tabs.forEach(t => t.addEventListener('click', () => setTab(t.dataset.tab)));
 
-    // Photos in ROOT
-    const photos = ["us1.jpg","us2.jpg","us3.jpg","us4.jpg","us5.jpg","us6.jpg","us7.jpg","us8.jpg","us9.jpg"];
-
-    // Build envelopes (no repeats)
-    const grid = document.getElementById('lettersGrid');
-    const stamps = ["A","D","♥","✶","✿","∞","✦","♡","A"];
-    const subtitles = [
-      "deschide",
-      "click",
-      "open",
-      "încă una",
-      "aici",
-      "înăuntru",
-      "pentru tine",
-      "mic secret",
-      "ultima"
-    ];
-
-    photos.forEach((src, i) => {
-      const env = document.createElement('div');
-      env.className = 'envelope';
-      env.setAttribute('data-index', String(i));
-
-      env.innerHTML = `
-        <div class="paper"></div>
-        <div class="flap"></div>
-        <div class="seal">${stamps[i] || "♥"}</div>
-        <div class="envText">
-          <div class="envLeft">
-            <div class="envTitle">Scrisoare ${i+1}</div>
-            <div class="envSub">${subtitles[i] || "apasă"}</div>
-          </div>
-          <div class="envStamp">🌸</div>
-        </div>
-      `;
-
-      env.addEventListener('click', () => openViewer(i));
-      grid.appendChild(env);
-    });
-
-    // Lightbox viewer
-    const overlay = document.getElementById('overlay');
-    const viewerImg = document.getElementById('viewerImg');
-    const viewerTitle = document.getElementById('viewerTitle');
-    const closeBtn = document.getElementById('closeBtn');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-
-    let current = 0;
-
-    function openViewer(i){
-      current = i;
-      renderViewer();
-      overlay.classList.add('show');
-      overlay.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeViewer(){
-      overlay.classList.remove('show');
-      overlay.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = 'auto';
-    }
-
-    function renderViewer(){
-      const src = photos[current];
-      viewerTitle.textContent = `Memory ${current + 1} / ${photos.length}`;
-      viewerImg.src = src;
-      viewerImg.onerror = () => {
-        viewerImg.removeAttribute('src');
-        viewerImg.replaceWith(Object.assign(document.createElement('div'), {
-          className: 'missing',
-          innerHTML: `Nu găsesc <b>${src}</b><br>Verifică dacă numele e exact (us1.jpg … us9.jpg).`
-        }));
-      };
-    }
-
-    prevBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      current = (current - 1 + photos.length) % photos.length;
-      // in case missing div replaced img, restore it:
-      if(!document.getElementById('viewerImg')){
-        const img = document.createElement('img');
-        img.id = 'viewerImg';
-        img.className = 'viewerImg';
-        img.alt = 'memory';
-        document.querySelector('.viewerBody').innerHTML = '';
-        document.querySelector('.viewerBody').appendChild(img);
-      }
-      renderViewer();
-    });
-
-    nextBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      current = (current + 1) % photos.length;
-      if(!document.getElementById('viewerImg')){
-        const img = document.createElement('img');
-        img.id = 'viewerImg';
-        img.className = 'viewerImg';
-        img.alt = 'memory';
-        document.querySelector('.viewerBody').innerHTML = '';
-        document.querySelector('.viewerBody').appendChild(img);
-      }
-      renderViewer();
-    });
-
-    closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeViewer(); });
-    overlay.addEventListener('click', closeViewer);
-    document.addEventListener('keydown', (e) => {
-      if(!overlay.classList.contains('show')) return;
-      if(e.key === 'Escape') closeViewer();
-      if(e.key === 'ArrowLeft') prevBtn.click();
-      if(e.key === 'ArrowRight') nextBtn.click();
-    });
-
-    // Buttons (simple)
+    // Buttons
     const yesBtn = document.getElementById('yesBtn');
     const noBtn = document.getElementById('noBtn');
 
@@ -748,12 +594,9 @@
       setTimeout(()=>confetti.classList.remove('show'), 780);
     }
 
-    yesBtn.addEventListener('click', () => {
-      burst();
-      setTab('mem');
-    });
+    yesBtn.addEventListener('click', () => { burst(); setTab('mem'); });
 
-    // small dodge, not childish
+    // small dodge
     let dodges = 0;
     noBtn.addEventListener('mouseenter', () => {
       if(dodges >= 3) return;
@@ -763,6 +606,134 @@
       noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
       setTimeout(()=> noBtn.style.transform = 'translate(0,0)', 220);
     });
+
+    // Lightbox viewer
+    const overlay = document.getElementById('overlay');
+    const viewerBody = document.getElementById('viewerBody');
+    let viewerImg = document.getElementById('viewerImg');
+    const viewerTitle = document.getElementById('viewerTitle');
+    const closeBtn = document.getElementById('closeBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    let current = 0;
+    let PHOTOS = [];
+
+    function ensureImg(){
+      viewerImg = document.getElementById('viewerImg');
+      if(!viewerImg){
+        viewerBody.innerHTML = '';
+        const img = document.createElement('img');
+        img.id = 'viewerImg';
+        img.className = 'viewerImg';
+        img.alt = 'memory';
+        viewerBody.appendChild(img);
+        viewerImg = img;
+      }
+    }
+
+    function openViewer(i){
+      current = i;
+      renderViewer();
+      overlay.classList.add('show');
+      overlay.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeViewer(){
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden','true');
+      document.body.style.overflow = 'auto';
+    }
+
+    function renderViewer(){
+      const src = PHOTOS[current];
+      viewerTitle.textContent = `Memory ${current + 1} / ${PHOTOS.length}`;
+      ensureImg();
+      viewerImg.src = src;
+      viewerImg.onerror = () => {
+        viewerBody.innerHTML = `<div class="missing">Nu găsesc <b>${src}</b>.<br>Probabil extensie diferită (JPG/JPEG).</div>`;
+      };
+    }
+
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if(!PHOTOS.length) return;
+      current = (current - 1 + PHOTOS.length) % PHOTOS.length;
+      renderViewer();
+    });
+
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if(!PHOTOS.length) return;
+      current = (current + 1) % PHOTOS.length;
+      renderViewer();
+    });
+
+    closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeViewer(); });
+    overlay.addEventListener('click', closeViewer);
+
+    document.addEventListener('keydown', (e) => {
+      if(!overlay.classList.contains('show')) return;
+      if(e.key === 'Escape') closeViewer();
+      if(e.key === 'ArrowLeft') prevBtn.click();
+      if(e.key === 'ArrowRight') nextBtn.click();
+    });
+
+    // ---- FIX: keep ONLY photos that actually exist ----
+    const candidates = ["us1.jpg","us2.jpg","us3.jpg","us4.jpg","us5.jpg","us6.jpg","us7.jpg","us8.jpg","us9.jpg"];
+
+    async function fileExists(url){
+      try{
+        const r = await fetch(url, { method:"HEAD", cache:"no-store" });
+        if(r.ok) return true;
+        const r2 = await fetch(url, { method:"GET", cache:"no-store" });
+        return r2.ok;
+      }catch{
+        return false;
+      }
+    }
+
+    const grid = document.getElementById('lettersGrid');
+    const stamps = ["A","D","♥","✶","✿","∞","✦","♡","A"];
+    const subtitles = ["deschide","click","open","încă una","aici","înăuntru","pentru tine","mic secret","ultima"];
+
+    (async () => {
+      const ok = [];
+      for(const c of candidates){
+        if(await fileExists(c)) ok.push(c);
+      }
+      PHOTOS = ok;
+
+      grid.innerHTML = "";
+
+      if(!PHOTOS.length){
+        const msg = document.createElement('div');
+        msg.className = 'missing';
+        msg.innerHTML = "Nu găsesc pozele (us1.jpg …). Verifică numele fișierelor în repo.";
+        grid.appendChild(msg);
+        return;
+      }
+
+      PHOTOS.forEach((src, i) => {
+        const env = document.createElement('div');
+        env.className = 'envelope';
+        env.innerHTML = `
+          <div class="paper"></div>
+          <div class="flap"></div>
+          <div class="seal">${stamps[i] || "♥"}</div>
+          <div class="envText">
+            <div class="envLeft">
+              <div class="envTitle">Scrisoare ${i+1}</div>
+              <div class="envSub">${subtitles[i] || "apasă"}</div>
+            </div>
+            <div class="envStamp">🌸</div>
+          </div>
+        `;
+        env.addEventListener('click', () => openViewer(i));
+        grid.appendChild(env);
+      });
+    })();
 
     // Petals
     const petals = document.getElementById('petals');
