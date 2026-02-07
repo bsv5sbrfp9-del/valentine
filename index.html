@@ -1,183 +1,608 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ro">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Be My Valentine?</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valentine</title>
+  <style>
+    :root{
+      --bg1:#fff2f7;
+      --bg2:#ffd6e7;
+      --ink:#1b1b1f;
+      --muted:#6b6b74;
+      --card:rgba(255,255,255,.78);
+      --stroke:rgba(255,255,255,.55);
+      --shadow: 0 22px 70px rgba(0,0,0,.14);
+      --radius: 26px;
+      --accent:#ff4f8b;
+      --accent2:#ff8bb2;
+    }
 
-<style>
-:root{
-  --pink:#ffd6e8;
-  --pink2:#ff9fc9;
-  --card:#ffffff;
-  --text:#333;
-  --shadow:0 20px 50px rgba(0,0,0,.2);
-  --radius:24px;
-}
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 600px at 18% 10%, rgba(255,255,255,.9), transparent 55%),
+        radial-gradient(900px 520px at 86% 18%, rgba(255,255,255,.65), transparent 60%),
+        radial-gradient(1100px 820px at 50% 110%, rgba(255,255,255,.55), transparent 62%),
+        linear-gradient(165deg, var(--bg1), var(--bg2));
+      overflow:hidden;
+    }
 
-*{box-sizing:border-box}
+    /* subtle floating petals background */
+    .petals{
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.55;
+      filter: blur(.2px);
+      transform: translateZ(0);
+    }
+    .petal{
+      position:absolute;
+      width:14px; height:10px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(255,79,139,.55));
+      box-shadow: 0 10px 30px rgba(255,79,139,.18);
+      animation: drift linear infinite;
+    }
+    @keyframes drift{
+      from { transform: translate3d(0,-120px,0) rotate(0deg); }
+      to   { transform: translate3d(0, calc(100vh + 140px),0) rotate(360deg); }
+    }
 
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-  background:radial-gradient(circle at top, #ffe9f3, #ffd1e6);
-  min-height:100vh;
-  overflow:hidden;
-}
+    /* layout */
+    .wrap{
+      min-height:100%;
+      display:grid;
+      place-items:center;
+      padding:24px;
+    }
 
-.page{
-  min-height:100vh;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-}
+    .stage{
+      width:min(980px, 100%);
+      display:grid;
+      gap:18px;
+    }
 
-.page.active{display:flex}
+    .card{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      overflow:hidden;
+    }
 
-.card{
-  background:var(--card);
-  border-radius:var(--radius);
-  padding:28px;
-  max-width:480px;
-  width:100%;
-  text-align:center;
-  box-shadow:var(--shadow);
-}
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:16px 18px;
+      border-bottom:1px solid rgba(255,255,255,.55);
+    }
+    .brand{
+      display:flex; gap:10px; align-items:center;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 10px 24px rgba(255,79,139,.25);
+    }
+    .nav{
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .chip{
+      border:1px solid rgba(0,0,0,.06);
+      background: rgba(255,255,255,.55);
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:13px;
+      color:var(--muted);
+      cursor:pointer;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      user-select:none;
+    }
+    .chip:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.75);
+      border-color: rgba(255,79,139,.22);
+    }
+    .chip.active{
+      color: var(--ink);
+      border-color: rgba(255,79,139,.35);
+      background: rgba(255,255,255,.86);
+    }
 
-h1,h2{color:#e75480}
+    .panel{
+      padding:26px;
+      display:none;
+      animation: panelIn .35s ease both;
+    }
+    .panel.active{ display:block; }
+    @keyframes panelIn{
+      from{ opacity:0; transform: translateY(10px); }
+      to  { opacity:1; transform: translateY(0); }
+    }
 
-button{
-  border:none;
-  padding:12px 26px;
-  border-radius:999px;
-  font-size:16px;
-  cursor:pointer;
-  background:linear-gradient(135deg,var(--pink2),#ff6fa8);
-  color:white;
-  margin:10px;
-}
+    /* hero */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:22px;
+      align-items:center;
+    }
+    @media (max-width: 860px){
+      .hero{ grid-template-columns: 1fr; }
+    }
 
-.menu{
-  display:flex;
-  gap:12px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin-top:20px;
-}
+    .title{
+      font-size: clamp(28px, 4vw, 44px);
+      margin:0;
+      letter-spacing:-.6px;
+      line-height:1.05;
+    }
+    .subtitle{
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size: 15px;
+      line-height:1.55;
+    }
 
-.menu button{background:#ffe0ee;color:#c73c6a}
+    .actions{
+      margin-top:16px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
 
-.cat{
-  font-size:90px;
-  margin-bottom:10px;
-}
+    .btn{
+      border:none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight:650;
+      font-size:14px;
+      cursor:pointer;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      user-select:none;
+    }
+    .btn-primary{
+      color:white;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 14px 34px rgba(255,79,139,.28);
+    }
+    .btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 18px 44px rgba(255,79,139,.34); }
+    .btn-ghost{
+      background: rgba(255,255,255,.65);
+      border: 1px solid rgba(0,0,0,.06);
+      color: var(--ink);
+    }
+    .btn-ghost:hover{ transform: translateY(-1px); background: rgba(255,255,255,.82); }
 
-.gallery{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
+    .note{
+      font-size:13px;
+      color: var(--muted);
+      margin-top: 10px;
+    }
 
-.gallery img{
-  width:100%;
-  border-radius:14px;
-  object-fit:cover;
-}
+    /* cat + peonies illustration (simple, tasteful) */
+    .illus{
+      position:relative;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.6);
+      background:
+        radial-gradient(380px 220px at 30% 20%, rgba(255,255,255,.85), rgba(255,255,255,.35)),
+        linear-gradient(180deg, rgba(255,255,255,.50), rgba(255,255,255,.20));
+      overflow:hidden;
+      padding:18px;
+      min-height: 230px;
+      display:grid;
+      place-items:center;
+      transform: translateZ(0);
+    }
+    .illus::after{
+      content:"";
+      position:absolute; inset:-40%;
+      background: radial-gradient(circle at 40% 35%, rgba(255,79,139,.20), transparent 60%);
+      transform: rotate(8deg);
+    }
 
-.full img{
-  width:100%;
-  border-radius:16px;
-}
+    .catwrap{
+      position:relative;
+      display:grid;
+      place-items:center;
+      gap:10px;
+      z-index:1;
+      animation: floaty 3.6s ease-in-out infinite;
+    }
+    @keyframes floaty{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-6px); }
+    }
+    .catface{
+      font-size: 70px;
+      filter: drop-shadow(0 12px 20px rgba(0,0,0,.12));
+      line-height:1;
+    }
+    .peonies{
+      font-size: 34px;
+      letter-spacing: -2px;
+      opacity:.95;
+      filter: drop-shadow(0 12px 20px rgba(255,79,139,.14));
+    }
 
-.back{
-  margin-top:20px;
-  background:#eee;
-  color:#555;
-}
-</style>
+    /* memories */
+    .sectionTitle{
+      margin:0 0 8px;
+      font-size:18px;
+      letter-spacing:-.2px;
+    }
+    .sectionHint{
+      margin:0 0 16px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.4;
+    }
+
+    .scrollRow{
+      display:flex;
+      gap:12px;
+      overflow:auto;
+      padding: 6px 2px 14px;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .scrollRow::-webkit-scrollbar{ height:10px; }
+    .scrollRow::-webkit-scrollbar-thumb{
+      background: rgba(0,0,0,.12);
+      border-radius: 999px;
+    }
+
+    .shot{
+      flex: 0 0 auto;
+      width: min(320px, 78vw);
+      aspect-ratio: 4 / 3;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.6);
+      background: rgba(255,255,255,.55);
+      overflow:hidden;
+      position:relative;
+      box-shadow: 0 12px 36px rgba(0,0,0,.10);
+      scroll-snap-align: start;
+      transform: translateZ(0);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .shot:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 16px 44px rgba(0,0,0,.14);
+    }
+    .shot img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    .tile{
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.6);
+      background: rgba(255,255,255,.55);
+      aspect-ratio: 1 / 1;
+      box-shadow: 0 10px 26px rgba(0,0,0,.08);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .tile:hover{ transform: translateY(-2px); box-shadow: 0 14px 34px rgba(0,0,0,.12); }
+    .tile img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    /* letter */
+    .letter{
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 20px;
+      padding:18px;
+      color: #2a2a2f;
+      line-height:1.65;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    }
+    .signature{
+      margin-top:14px;
+      color: var(--muted);
+      font-size:13px;
+    }
+
+    /* for you */
+    .bouquet{
+      display:grid;
+      place-items:center;
+      padding: 12px 0 4px;
+    }
+    .bouquet .big{
+      font-size: 70px;
+      line-height:1;
+      filter: drop-shadow(0 14px 26px rgba(255,79,139,.18));
+      animation: bloom .9s ease both;
+    }
+    @keyframes bloom{
+      from{ transform: scale(.96); opacity:0; }
+      to{ transform: scale(1); opacity:1; }
+    }
+    .mini{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:10px;
+      margin-top: 12px;
+    }
+    .mini .pill{
+      background: rgba(255,255,255,.62);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius: 16px;
+      padding:12px;
+      color: var(--muted);
+      font-size:13px;
+    }
+
+    /* confetti hearts (very subtle) */
+    .confetti{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      display:none;
+      z-index:10;
+    }
+    .confetti.show{ display:block; }
+    .c{
+      position:absolute;
+      font-size:14px;
+      opacity:.7;
+      animation: pop 1.35s ease-out forwards;
+      filter: drop-shadow(0 10px 18px rgba(255,79,139,.18));
+    }
+    @keyframes pop{
+      0%{ transform: translateY(0) scale(.9); opacity:.0; }
+      10%{ opacity:.75; }
+      100%{ transform: translateY(-120px) scale(1.15); opacity:0; }
+    }
+
+    /* image fallback */
+    .missing{
+      display:grid;
+      place-items:center;
+      color: var(--muted);
+      font-size:13px;
+      height:100%;
+      padding:14px;
+      text-align:center;
+      background: rgba(255,255,255,.55);
+    }
+  </style>
 </head>
 
 <body>
+  <div class="petals" id="petals"></div>
+  <div class="confetti" id="confetti"></div>
 
-<!-- PAGE 1 -->
-<div class="page active" id="page1">
-  <div class="card">
-    <div class="cat">🐱🌸</div>
-    <h1>Amalia,</h1>
-    <p>vrei să fii Valentine-ul meu?</p>
-    <button onclick="go(2)">DA 💖</button>
-    <button onclick="alert('Răspunsul corect e DA 😼')">NU</button>
-  </div>
-</div>
+  <div class="wrap">
+    <div class="stage card">
+      <div class="topbar">
+        <div class="brand"><span class="dot"></span> Valentine</div>
+        <div class="nav">
+          <div class="chip active" data-tab="home">Start</div>
+          <div class="chip" data-tab="mem">Memories</div>
+          <div class="chip" data-tab="letter">Letter</div>
+          <div class="chip" data-tab="for">For you</div>
+        </div>
+      </div>
 
-<!-- PAGE 2 -->
-<div class="page" id="page2">
-  <div class="card">
-    <div class="cat">😸🌸</div>
-    <h2>YEEEY 💕</h2>
-    <p>Știam eu!</p>
+      <!-- HOME -->
+      <section class="panel active" id="home">
+        <div class="hero">
+          <div>
+            <h1 class="title">Amalia, vrei să fii Valentine-ul meu?</h1>
+            <p class="subtitle">
+              Simplu. Fără povești. Doar noi.
+            </p>
 
-    <div class="menu">
-      <button onclick="go(3)">📸 Memories</button>
-      <button onclick="go(4)">💌 Letter</button>
-      <button onclick="go(5)">🌸 For You</button>
+            <div class="actions">
+              <button class="btn btn-primary" id="yesBtn">DA</button>
+              <button class="btn btn-ghost" id="noBtn">NU</button>
+            </div>
+
+            <div class="note" id="note"></div>
+          </div>
+
+          <div class="illus">
+            <div class="catwrap">
+              <div class="catface">🐱</div>
+              <div class="peonies">🌸🌸</div>
+              <div style="color:var(--muted); font-size:13px;">bujori roz</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MEMORIES -->
+      <section class="panel" id="mem">
+        <h2 class="sectionTitle">Memories</h2>
+        <p class="sectionHint">Poți da scroll. (pe telefon tragi cu degetul)</p>
+
+        <div class="scrollRow" id="row"></div>
+
+        <div class="grid" id="grid"></div>
+      </section>
+
+      <!-- LETTER -->
+      <section class="panel" id="letter">
+        <h2 class="sectionTitle">Letter</h2>
+        <p class="sectionHint">Scurt și real.</p>
+
+        <div class="letter">
+          Micuțule șobi, mă bucur nespus de mult ca am ajuns până în punctul ăsta , cu bune și cu rele și vreau să iti multumesc ca încă ești alături de mine și mă sprijini. Îmi pare rău pentru tot haosul pe care îl produc în viața ta și sper să ne bucurăm împreună tot restul vieții . Te iubesc enorm!! 💌
+          <div class="signature">— David</div>
+        </div>
+      </section>
+
+      <!-- FOR YOU -->
+      <section class="panel" id="for">
+        <h2 class="sectionTitle">For you</h2>
+        <p class="sectionHint">Bujori roz. Atât.</p>
+
+        <div class="bouquet">
+          <div class="big">🌸</div>
+          <div class="mini">
+            <div class="pill">Te aleg. În fiecare zi.</div>
+            <div class="pill">Fără dramă. Fără “cringe”.</div>
+            <div class="pill">Doar liniște și noi.</div>
+            <div class="pill">🌸</div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
-</div>
 
-<!-- PAGE 3 -->
-<div class="page" id="page3">
-  <div class="card full">
-    <h2>Memories</h2>
-    <div class="gallery">
-      <img src="us1.jpg">
-      <img src="us2.jpg">
-      <img src="us3.jpg">
-      <img src="us4.jpg">
-      <img src="us5.jpg">
-      <img src="us6.jpg">
-      <img src="us7.jpg">
-      <img src="us8.jpg">
-      <img src="us9.jpg">
-    </div>
-    <button class="back" onclick="go(2)">Înapoi</button>
-  </div>
-</div>
+  <script>
+    // Tabs
+    const chips = document.querySelectorAll('.chip');
+    const panels = {
+      home: document.getElementById('home'),
+      mem: document.getElementById('mem'),
+      letter: document.getElementById('letter'),
+      for: document.getElementById('for')
+    };
 
-<!-- PAGE 4 -->
-<div class="page" id="page4">
-  <div class="card">
-    <h2>Words from my heart</h2>
-    <p style="text-align:left">
-      Micuțule șobi,<br><br>
-      mă bucur nespus de mult că am ajuns până în punctul ăsta,
-      cu bune și cu rele și vreau să îți mulțumesc că încă ești
-      alături de mine și mă sprijini.<br><br>
-      Îmi pare rău pentru tot haosul pe care îl produc în viața ta
-      și sper să ne bucurăm împreună tot restul vieții.<br><br>
-      Te iubesc enorm!! 💌
-    </p>
-    <button class="back" onclick="go(2)">Înapoi</button>
-  </div>
-</div>
+    function setTab(key){
+      chips.forEach(c => c.classList.toggle('active', c.dataset.tab === key));
+      Object.entries(panels).forEach(([k,el]) => el.classList.toggle('active', k === key));
+    }
+    chips.forEach(c => c.addEventListener('click', () => setTab(c.dataset.tab)));
 
-<!-- PAGE 5 -->
-<div class="page" id="page5">
-  <div class="card">
-    <h2>Flowers for my love</h2>
-    <div class="cat">🌸🌸🌸</div>
-    <p>Bujori roz pentru cea mai frumoasă pisicuță 🐱</p>
-    <button class="back" onclick="go(2)">Înapoi</button>
-  </div>
-</div>
+    // Photos (ROOT)
+    const photos = [
+      "us1.jpg","us2.jpg","us3.jpg","us4.jpg","us5.jpg",
+      "us6.jpg","us7.jpg","us8.jpg","us9.jpg"
+    ];
 
-<script>
-function go(n){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page'+n).classList.add('active');
-}
-</script>
+    // Build memories UI (scroll row + grid)
+    const row = document.getElementById('row');
+    const grid = document.getElementById('grid');
 
+    function imgBlock(src){
+      const wrap = document.createElement('div');
+      wrap.className = 'shot';
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = "poză";
+      img.onerror = () => {
+        wrap.innerHTML = '<div class="missing">Nu găsesc '+src+'<br>Verifică dacă numele e exact (us1.jpg…)</div>';
+      };
+      wrap.appendChild(img);
+      return wrap;
+    }
+
+    function tile(src){
+      const wrap = document.createElement('div');
+      wrap.className = 'tile';
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = "poză";
+      img.onerror = () => {
+        wrap.innerHTML = '<div class="missing">Lipsește '+src+'</div>';
+      };
+      wrap.appendChild(img);
+      return wrap;
+    }
+
+    photos.forEach((p, i) => {
+      // first 5 in scroll row (bigger)
+      if(i < 5) row.appendChild(imgBlock(p));
+      // all in grid
+      grid.appendChild(tile(p));
+    });
+
+    // Petals background (subtle)
+    const petals = document.getElementById('petals');
+    const count = 14;
+    for(let i=0;i<count;i++){
+      const s = document.createElement('div');
+      s.className = 'petal';
+      const left = Math.random()*100;
+      const dur = 8 + Math.random()*10;
+      const delay = -Math.random()*dur;
+      const size = 10 + Math.random()*10;
+      s.style.left = left+'%';
+      s.style.animationDuration = dur+'s';
+      s.style.animationDelay = delay+'s';
+      s.style.opacity = (0.25 + Math.random()*0.55).toFixed(2);
+      s.style.width = size+'px';
+      s.style.height = (size*0.72)+'px';
+      s.style.top = (-120 - Math.random()*500) + 'px';
+      petals.appendChild(s);
+    }
+
+    // Buttons behavior (simple, not cringe)
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn  = document.getElementById('noBtn');
+    const note   = document.getElementById('note');
+
+    // subtle confetti only on YES
+    const confetti = document.getElementById('confetti');
+    function burst(){
+      confetti.classList.add('show');
+      confetti.innerHTML = '';
+      const n = 16;
+      for(let i=0;i<n;i++){
+        const h = document.createElement('div');
+        h.className = 'c';
+        h.textContent = '❤';
+        h.style.left = (40 + Math.random()*20) + '%';
+        h.style.top  = (55 + Math.random()*10) + '%';
+        h.style.animationDelay = (Math.random()*0.08)+'s';
+        h.style.fontSize = (12 + Math.random()*10)+'px';
+        confetti.appendChild(h);
+      }
+      setTimeout(()=>confetti.classList.remove('show'), 800);
+    }
+
+    yesBtn.addEventListener('click', () => {
+      burst();
+      note.textContent = "Perfect. Uite amintirile.";
+      setTab('mem');
+      // scroll row to start
+      row.scrollTo({left:0, behavior:'smooth'});
+    });
+
+    // Make NO button playfully dodge a bit, but not childish
+    let dodges = 0;
+    noBtn.addEventListener('mouseenter', () => {
+      if(dodges >= 4) return;
+      dodges++;
+      const dx = (Math.random() * 120) - 60;
+      const dy = (Math.random() * 36) - 18;
+      noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+      setTimeout(()=> noBtn.style.transform = 'translate(0,0)', 240);
+    });
+    noBtn.addEventListener('click', () => {
+      note.textContent = "Ok 🙂 Mai gândește-te.";
+    });
+
+    // Start on home
+    setTab('home');
+  </script>
 </body>
 </html>
