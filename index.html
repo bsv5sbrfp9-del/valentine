@@ -4,19 +4,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Be My Valentine?</title>
+
   <style>
     :root{
       --bg1:#ffd3e1;
       --bg2:#ffeef5;
-      --card:#ffffffcc;
+      --card:#ffffff;
       --text:#1f1f1f;
-      --muted:#6b6b6b;
+      --muted:#5d5d5d;
       --pink:#ff4f93;
       --pink2:#ff73a7;
       --shadow: 0 18px 55px rgba(0,0,0,.18);
       --radius: 22px;
     }
+
     *{ box-sizing:border-box; }
+
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
@@ -25,6 +28,7 @@
       background: radial-gradient(1200px 700px at 40% 20%, var(--bg2), var(--bg1));
       overflow-x:hidden;
     }
+
     .page{
       min-height:100vh;
       display:none;
@@ -33,25 +37,28 @@
       padding:22px;
     }
     .page.active{ display:flex; }
+
     .card{
       width:min(720px, 92vw);
-      background:var(--card);
+      background: rgba(255,255,255,.92);
       border:1px solid rgba(255,255,255,.7);
       box-shadow: var(--shadow);
       border-radius: var(--radius);
       padding:22px;
       position:relative;
-      backdrop-filter: blur(10px);
     }
     .card.wide{ width:min(880px, 94vw); }
+
     .hero{ display:flex; justify-content:center; margin-top:8px; }
     .cat-svg{ width:min(560px, 100%); height:auto; }
+
     .title{
       text-align:center;
       margin:10px 0 18px;
       font-size: clamp(22px, 4vw, 34px);
       line-height:1.15;
     }
+
     .actions{
       display:flex;
       gap:14px;
@@ -59,6 +66,7 @@
       align-items:center;
       margin: 12px 0 6px;
     }
+
     .btn{
       border:none;
       border-radius:999px;
@@ -70,11 +78,13 @@
       user-select:none;
     }
     .btn:active{ transform: scale(.97); }
+
     .btn-yes{
       background: linear-gradient(135deg, var(--pink), var(--pink2));
       color:white;
       min-width:120px;
     }
+
     .btn-no{
       background: white;
       color:#333;
@@ -82,9 +92,10 @@
       min-width:120px;
       position:relative;
     }
+
     .hint{ text-align:center; color:var(--muted); margin:10px 0 0; }
 
-    /* page2 */
+    /* PAGE 2 */
     .top{
       display:flex;
       gap:18px;
@@ -94,6 +105,7 @@
     }
     .cat-mini{ width:220px; }
     .mini-svg{ width:220px; height:auto; }
+
     .big{ margin:0; font-size: clamp(22px, 4vw, 34px); }
     .sub{ margin:6px 0 0; color:var(--muted); }
 
@@ -120,14 +132,14 @@
       .menu{ grid-template-columns: 1fr; }
     }
 
-    /* modals */
+    /* MODAL / OVERLAY — FĂRĂ BLUR */
     .overlay{
       position:fixed;
       inset:0;
       background: rgba(0,0,0,.35);
-      backdrop-filter: blur(4px);
       z-index:50;
     }
+
     .modal{
       position:fixed;
       left:50%;
@@ -136,13 +148,14 @@
       width:min(920px, 92vw);
       max-height: 86vh;
       overflow:auto;
-      background: rgba(255,255,255,.92);
+      background: rgba(255,255,255,.98);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding:18px 18px 16px;
       z-index:60;
-      border: 1px solid rgba(0,0,0,.06);
+      border: 1px solid rgba(0,0,0,.08);
     }
+
     .modal h3{
       margin:6px 4px 14px;
       color:#b2124b;
@@ -150,6 +163,7 @@
       text-align:center;
       font-size: clamp(18px, 3.2vw, 26px);
     }
+
     .hidden{ display:none !important; }
 
     .close{
@@ -163,6 +177,7 @@
       cursor:pointer;
     }
 
+    /* Memories */
     .mem-grid{
       display:grid;
       grid-template-columns: 1.15fr .85fr;
@@ -172,19 +187,23 @@
     @media (max-width:860px){
       .mem-grid{ grid-template-columns: 1fr; }
     }
+
     .mem-photos{
-      background: rgba(255,245,250,.9);
+      background: rgba(255,245,250,.95);
       border-radius:18px;
       padding:12px;
       border:1px solid rgba(0,0,0,.05);
     }
+
     .mem-photos img{
       width:100%;
       height: min(52vh, 420px);
       object-fit: cover;
       border-radius:14px;
       display:block;
+      background:#f3f3f3;
     }
+
     .mem-nav{
       display:flex;
       align-items:center;
@@ -193,6 +212,7 @@
       color:var(--muted);
       font-weight:600;
     }
+
     .small{
       border:none;
       background:white;
@@ -203,24 +223,29 @@
     }
 
     .note{
-      background: rgba(255,255,255,.95);
+      background: rgba(255,255,255,.98);
       border-radius:16px;
       padding:14px 14px;
       border:1px dashed rgba(178,18,75,.35);
       box-shadow: 0 10px 20px rgba(0,0,0,.06);
+      color:#222;
     }
 
+    /* Letter (clar, mai mare) */
     .letter{
       max-width: 760px;
       margin: 0 auto;
-      background: rgba(255,245,250,.75);
-      border:1px solid rgba(0,0,0,.05);
+      background: rgba(255,245,250,.92);
+      border:1px solid rgba(0,0,0,.06);
       border-radius:18px;
-      padding:14px 16px;
-      line-height:1.55;
+      padding:16px 18px;
+      line-height:1.7;
+      font-size: 18px;
+      color:#111;
     }
     .letter p{ margin: 10px 0; }
 
+    /* For You */
     .flowers{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -230,32 +255,32 @@
     @media (max-width:860px){
       .flowers{ grid-template-columns:1fr; }
     }
+
     .bouquet{
       width:100%;
       height:auto;
-      background: rgba(255,245,250,.75);
+      background: rgba(255,245,250,.92);
       border-radius:18px;
-      border:1px solid rgba(0,0,0,.05);
+      border:1px solid rgba(0,0,0,.06);
       padding:10px;
     }
-    .mini-notes{
-      display:grid;
-      gap:10px;
-    }
 
+    .mini-notes{ display:grid; gap:10px; }
+
+    /* Toast */
     .toast{
       position:fixed;
       left:50%;
       bottom:18px;
       transform: translateX(-50%);
-      background: rgba(255,255,255,.95);
+      background: rgba(255,255,255,.98);
       border-radius:999px;
       padding:10px 14px;
       box-shadow: 0 12px 30px rgba(0,0,0,.18);
       z-index:80;
     }
 
-    /* falling hearts */
+    /* Falling hearts */
     .hearts{
       position:fixed;
       inset:0;
@@ -274,9 +299,11 @@
     @keyframes fall{
       to{ transform: translateY(calc(100vh + 80px)) rotate(180deg); opacity: .15; }
     }
+
     .card, .modal{ z-index:2; }
   </style>
 </head>
+
 <body>
   <div class="hearts" aria-hidden="true"></div>
 
@@ -288,7 +315,7 @@
         <svg class="cat-svg" viewBox="0 0 520 320" role="img" aria-label="Pisicuță cu bujori roz">
           <path d="M70,160 C70,70 160,30 250,45 C330,20 445,70 450,165
                    C465,255 380,300 260,290 C140,305 70,250 70,160 Z"
-                fill="rgba(255,255,255,0.7)"/>
+                fill="rgba(255,255,255,0.65)"/>
           <g transform="translate(150,70)">
             <path d="M70 40 L45 10 L25 45" fill="#fff" stroke="#222" stroke-width="4" stroke-linejoin="round"/>
             <path d="M170 40 L195 10 L215 45" fill="#fff" stroke="#222" stroke-width="4" stroke-linejoin="round"/>
@@ -328,7 +355,7 @@
         </svg>
       </div>
 
-      <h1 class="title"><span id="nameTarget">Bianca</span>, vrei să fii Valentine-ul meu?</h1>
+      <h1 class="title"><span id="nameTarget">Amalia</span>, vrei să fii Valentine-ul meu?</h1>
 
       <div class="actions">
         <button id="yesBtn" class="btn btn-yes">YES</button>
@@ -390,6 +417,7 @@
   <!-- Memories -->
   <section id="modal-memories" class="modal hidden" role="dialog" aria-modal="true">
     <h3>Forever Together</h3>
+
     <div class="mem-grid">
       <div class="mem-photos">
         <img id="memImg" src="assets/us1.jpg" alt="Poză cu noi" />
@@ -399,28 +427,35 @@
           <button class="small" id="nextPhoto">▶</button>
         </div>
       </div>
-      <div class="mem-notes" style="display:grid; gap:12px;">
+
+      <div style="display:grid; gap:12px;">
         <div class="note">Am împărtășit atâtea amintiri speciale împreună…</div>
         <div class="note">…și abia aștept să creăm mai multe alături de tine, dragostea mea!</div>
       </div>
     </div>
+
     <button class="close" data-close>Close</button>
   </section>
 
   <!-- Letter -->
   <section id="modal-letter" class="modal hidden" role="dialog" aria-modal="true">
     <h3>Words from my heart</h3>
+
     <div class="letter">
       <p><strong>Iubirea mea,</strong></p>
+
       <p>
-        Micuțule șobi, mă bucur nespus de mult ca am ajuns până în punctul ăsta , cu bune și cu rele
-        și vreau să itimultumesc ca încă ești alături de mine și mă sprijini.
+        Micuțule șobi, mă bucur nespus de mult că am ajuns până în punctul ăsta, cu bune și cu rele,
+        și vreau să îți mulțumesc că încă ești alături de mine și mă sprijini.
       </p>
+
       <p>
-        Îmi pare rău pentru tot haosul pe care îl produc în viața ta și sper să ne bucurăm împreună tot restul vieții .
+        Îmi pare rău pentru tot haosul pe care îl produc în viața ta și sper să ne bucurăm împreună tot restul vieții.
       </p>
+
       <p><strong>Te iubesc enorm!! 💌</strong></p>
     </div>
+
     <button class="close" data-close>Close</button>
   </section>
 
@@ -467,7 +502,6 @@
   <div id="toast" class="toast hidden">💖</div>
 
   <script>
-    // Helpers
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => document.querySelectorAll(s);
 
@@ -490,12 +524,13 @@
       overlay.classList.remove("hidden");
       $(`#modal-${id}`).classList.remove("hidden");
     }
+
     function closeAll(){
       overlay.classList.add("hidden");
       $$(".modal").forEach(m => m.classList.add("hidden"));
     }
 
-    // hearts generator
+    // hearts
     const heartsWrap = document.querySelector(".hearts");
     const heartChars = ["💗","💖","💘","💝","💕","💓"];
     function spawnHeart(){
@@ -556,13 +591,14 @@
     $$("[data-close]").forEach(b=>b.addEventListener("click", closeAll));
     document.addEventListener("keydown", (e)=>{ if(e.key==="Escape") closeAll(); });
 
-    // Memories slideshow (pune pozele în /assets cu numele de mai jos)
+    // Memories slideshow — POZELE VOASTRE
+    // Pune-le în repo: assets/us1.jpg ... assets/us4.jpg
     const photos = [
       "assets/us1.jpg",
       "assets/us2.jpg",
       "assets/us3.jpg",
-      "assets/us4.jpg", // dacă nu ai 4 poze, șterge linia asta și modifică 1/4
-    ].filter(Boolean);
+      "assets/us4.jpg"
+    ];
 
     let idx = 0;
     const memImg = $("#memImg");
@@ -572,18 +608,18 @@
       memImg.src = photos[idx];
       photoCount.textContent = `${idx+1} / ${photos.length}`;
     }
+
     $("#prevPhoto").addEventListener("click", ()=>{
       idx = (idx - 1 + photos.length) % photos.length;
       updatePhoto();
     });
+
     $("#nextPhoto").addEventListener("click", ()=>{
       idx = (idx + 1) % photos.length;
       updatePhoto();
     });
-    updatePhoto();
 
-    // OPTIONAL: schimbă numele fetei din titlu:
-    // $("#nameTarget").textContent = "Bianca";
+    updatePhoto();
   </script>
 </body>
 </html>
